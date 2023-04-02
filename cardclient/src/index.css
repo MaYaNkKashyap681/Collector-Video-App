@@ -1,0 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  color-scheme: light;
+
+}
+
+.gradient-1 {
+  background: linear-gradient(270deg, #ffffff 0%, #b4abd4 100%);
+}
+
+.gradient-2 {
+  background: linear-gradient(270deg, #a78ecc 0%, #624dac 100%);
+}
