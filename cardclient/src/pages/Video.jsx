@@ -7,7 +7,7 @@ const Video = () => {
 
   useEffect(() => {
     setLink(queryParameters.get("vlink"));
-    console.log(link);
+    // console.log(link);
   });
 
   return (

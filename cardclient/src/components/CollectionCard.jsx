@@ -20,7 +20,7 @@ const CollectionCard = ({ _id, bname, desc }) => {
         dispatch(fetchBuckets());
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       alert(err);
       return;
     }

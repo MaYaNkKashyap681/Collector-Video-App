@@ -26,7 +26,7 @@ const Register = () => {
         email: details.email,
         password: details.password,
       });
-      console.log(res);
+      // console.log(res);
       if (res.status === 201) {
         const data = res.data;
         const token = data.token;
@@ -39,7 +39,7 @@ const Register = () => {
         navigate("/");
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
     finally {
       setDeatails({...details, email: '', password: ''})

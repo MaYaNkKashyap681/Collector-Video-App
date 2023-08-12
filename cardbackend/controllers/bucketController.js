@@ -4,6 +4,30 @@ module.exports.addBucket = async (req, res) => {
   const { name, desc } = req.body;
 
   try {
+    // Access the authenticated user's ID from req.userId
+    const currentUser = req.user;
+
+    // console.log(req.body, currentUser)
+    // Create the bucket with the user's ID
+    const post = await bucketModel.create({
+      bname: name,
+      desc: desc,
+      user: currentUser.id, // Link the bucket to the user
+    });
+
+    if (post) {
+      res.status(201).json({
+        msg: "New Bucket is Created",
+      });
+    }
+  } catch (err) {
+    // console.log(err);
+    res.status(400).json(err.message);
+  }
+};
+/* module.exports.addBucket = async (req, res) => {
+  const { name, desc } = req.body;
+  try {
     const post = await bucketModel.create({
       bname: name,
       desc: desc,
@@ -18,14 +42,14 @@ module.exports.addBucket = async (req, res) => {
     console.log(err);
     res.status(400).json(err.message);
   }
-};
+}; */
 
 module.exports.removeBucket = async (req, res) => {
   const { id } = req.body;
-  console.log(id)
+  // console.log(id)
   try {
     const deletedPost = await bucketModel.findByIdAndDelete(id);
-    console.log(deletedPost);
+    // console.log(deletedPost);
     if (deletedPost) {
       res.status(200).json({
         msg: "Deleted Successfully",
@@ -55,6 +79,29 @@ module.exports.renameBucket = async (req, res) => {
 
 module.exports.getBuckets = async (req, res) => {
   try {
+
+    // Access the authenticated user's ID from req.userId
+    const currentUser = req.user;
+    // Retrieve buckets that belong to the user
+    const buckets = await bucketModel.find({ user: currentUser.id });
+
+    // console.log(buckets);
+    res.status(200).send(buckets);
+
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+};
+
+
+
+
+
+
+
+
+/* module.exports.getBuckets = async (req, res) => {
+  try {
     const buckets = await bucketModel.find({}).populate("cards").exec();
 
     res.status(200).send(buckets);
@@ -62,7 +109,7 @@ module.exports.getBuckets = async (req, res) => {
     res.status(400).json(err.message);
   }
 };
-
+ */
 module.exports.moveCards = async (req, res) => {
   const { oldBucketId, newBucketId, cardId } = req.body;
 

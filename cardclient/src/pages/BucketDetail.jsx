@@ -166,7 +166,7 @@ const BucketDetail = () => {
         fetchCard();
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return;
     } finally {
       setNewCard({ ...newCard, title: "", link: "" });
@@ -181,7 +181,7 @@ const BucketDetail = () => {
         `http://localhost:3000/bucket/single/${bucket_Id}`
       );
       if (res.status === 200) {
-        console.log(res.data);
+        // console.log(res.data);
         setCards(res.data);
       }
     } catch (err) {

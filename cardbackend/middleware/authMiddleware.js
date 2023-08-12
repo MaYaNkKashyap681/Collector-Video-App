@@ -1,18 +1,20 @@
 const jwt = require('jsonwebtoken');
-const userModel = require('../mongodb/models/User')
+const userModel = require('../mongodb/models/User');
 
 const requireAuth = (req, res, next) => {
-  const token = req.body.jwt;
-  console.log(token)
+  const authHeader = req.header('Authorization');
+  // console.log(authHeader);
 
-  // check json web token exists & is verified
-  if (token) {
+  if (authHeader) {
+    const token = authHeader.replace('Bearer ', ''); // Remove 'Bearer ' prefix
     jwt.verify(token, 'net ninja secret', (err, decodedToken) => {
       if (err) {
-        console.log(err.message);
+        // console.log(err.message);
         res.redirect('/login');
       } else {
-        console.log(decodedToken);
+        // console.log(decodedToken);
+        // Store the user ID in the request object
+        req.user = decodedToken;
         next();
       }
     });
@@ -22,8 +24,9 @@ const requireAuth = (req, res, next) => {
 };
 
 const checkUser = (req, res, next) => {
-  const token = req.body.jwt;
-  if (token) {
+  const authHeader = req.header('Authorization');
+  if (authHeader) {
+    const token = authHeader.replace('Bearer ', ''); // Remove 'Bearer ' prefix
     jwt.verify(token, 'net ninja secret', async (err, decodedToken) => {
       if (err) {
         res.locals.user = null;
@@ -39,6 +42,5 @@ const checkUser = (req, res, next) => {
     next();
   }
 };
-
 
 module.exports = { requireAuth, checkUser };

@@ -34,13 +34,34 @@ export default bucketSlice.reducer;
 export const buckets = (state) => state.bucket.data;
 export const status = (state) => state.bucket.status;
 
-export const fetchBuckets = createAsyncThunk("buckets/fetch", async () => {
-  const res = await fetch("http://localhost:3000/bucket/all");
-  const data = await res.json();
-  const arr = [];
-  for (let i = 0; i < data.length; ++i) {
-    arr.push({ id: data[i]["_id"], name: data[i]["bname"] });
+export const fetchBuckets = createAsyncThunk("buckets/fetch", async (_, { getState }) => {
+  const token =  JSON.parse(localStorage.getItem('collector_token'));
+  // console.log("token");
+  
+  try {
+    const res = await fetch("http://localhost:3000/bucket/all", {
+      method: 'GET', // Use GET for fetching data
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch data');
+    }
+
+    const data = await res.json();
+    const arr = [];
+
+    // console.log(data);
+    for (let i = 0; i < data.length; ++i) {
+      arr.push({ id: data[i]["_id"], name: data[i]["bname"] });
+    }
+    localStorage.setItem("buckets", JSON.stringify(arr));
+    return data;
+  } catch (err) {
+    console.error('Error fetching data:', err);
+    throw err; // Rethrow the error for Redux Toolkit to handle
   }
-  localStorage.setItem("buckets", JSON.stringify(arr));
-  return data;
 });

@@ -21,7 +21,6 @@ const Collection = () => {
   const handleChange = (e) => {
     setNewBucket({ ...newBucket, [e.target.name]: e.target.value });
   };
-
   const addBucket = async (e) => {
     e.preventDefault();
     if (newBucket.title.length <= 6 || newBucket.desc.length >= 20) {
@@ -29,10 +28,20 @@ const Collection = () => {
     }
     setInProgress(true);
     try {
-      const res = await axios.post(`${baseUrl}/add`, {
-        name: newBucket.title,
-        desc: newBucket.desc,
-      });
+      const token = JSON.parse(localStorage.getItem('collector_token'));
+
+      const res = await axios.post(
+        `${baseUrl}/add`,
+        {
+          name: newBucket.title,
+          desc: newBucket.desc,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (res.status === 201) {
         dispatch(fetchBuckets());
@@ -41,7 +50,7 @@ const Collection = () => {
       console.log(err);
       return;
     } finally {
-      setNewBucket({ ...newBucket, title: "", desc: "" });
+      setNewBucket({ ...newBucket, title: '', desc: '' });
       setInProgress(false);
       setToggle(false);
     }
@@ -75,10 +84,14 @@ const Collection = () => {
     }
   };
 
- 
+
 
   useEffect(() => {
-    dispatch(fetchBuckets());
+
+    if (localStorage.getItem('collector_token')) {
+      dispatch(fetchBuckets());
+    }
+    
   }, []);
 
   return (
@@ -141,10 +154,10 @@ const Collection = () => {
         <></>
       )}
 
-      {!bucketsList ? (
+      {bucketsList.length === 0 ? (
         <>
           <div className={`${styles.padding}`}>
-            <h1 className="text-6xl font-extralight">No Posts to Show</h1>
+            <h1 className="text-6xl font-extralight">No Buckets to Show</h1>
           </div>
         </>
       ) : (

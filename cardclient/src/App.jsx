@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer";
 import { Navbar } from "./components/index";
 import { Provider } from 'react-redux';
+
 import store from "./store";
 import {
   Authentication,
@@ -13,6 +14,7 @@ import {
 } from "./pages/index";
 
 function App() {
+ 
   return (
     <Provider store={store}>
       <BrowserRouter>

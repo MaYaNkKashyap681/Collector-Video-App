@@ -29,7 +29,7 @@ const Authentication = () => {
         email: details.email,
         password: details.password,
       });
-      console.log(res);
+      // console.log(res);
       if (res.status === 200) {
         const data = res.data;
         const token = data.token;
@@ -42,7 +42,7 @@ const Authentication = () => {
         navigate("/");
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     } finally {
       setDeatails({ ...details, email: "", password: "" });
       setInProgress(false);
